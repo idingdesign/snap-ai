@@ -49,7 +49,7 @@ function createOverlayWindow() {
     overlayWin.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
     overlayWin.loadURL(isDev
         ? 'http://localhost:5173/src/overlay/index.html'
-        : `file://${path.join(__dirname, '../dist/overlay/index.html')}`
+        : `file://${path.join(__dirname, '../dist/src/overlay/index.html')}`
     )
     overlayWin.once('ready-to-show', () => {
         overlayWin.show()
@@ -91,7 +91,7 @@ function createResultWindow(x, y) {
 
     resultWin.loadURL(isDev
         ? 'http://localhost:5173/src/result/index.html'
-        : `file://${path.join(__dirname, '../dist/result/index.html')}`
+        : `file://${path.join(__dirname, '../dist/src/result/index.html')}`
     )
     // Don't call show() here — window will be shown from capture-region handler
     // after did-finish-load so React is fully mounted before first paint
@@ -117,7 +117,7 @@ function createHistoryWindow() {
 
     historyWin.loadURL(isDev
         ? 'http://localhost:5173/src/history/index.html'
-        : `file://${path.join(__dirname, '../dist/history/index.html')}`
+        : `file://${path.join(__dirname, '../dist/src/history/index.html')}`
     )
     historyWin.once('closed', () => { historyWin = null })
     historyWin.once('ready-to-show', () => historyWin.show())
@@ -143,7 +143,7 @@ function createSettingsWindow() {
 
     settingsWin.loadURL(isDev
         ? 'http://localhost:5173/src/settings/index.html'
-        : `file://${path.join(__dirname, '../dist/settings/index.html')}`
+        : `file://${path.join(__dirname, '../dist/src/settings/index.html')}`
     )
     settingsWin.once('closed', () => { settingsWin = null })
     settingsWin.once('ready-to-show', () => settingsWin.show())
