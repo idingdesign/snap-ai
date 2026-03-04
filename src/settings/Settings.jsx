@@ -76,6 +76,7 @@ function Settings() {
   const [targetLang, setTargetLang] = useState('auto')
   const [autoClose, setAutoClose] = useState(true)
   const [autoCloseDelay, setAutoCloseDelay] = useState(8)
+  const [autoStart, setAutoStart] = useState(false)
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
@@ -90,7 +91,8 @@ function Settings() {
       api.storeGet('targetLang', 'auto'),
       api.storeGet('autoClose', true),
       api.storeGet('autoCloseDelay', 8),
-    ]).then(([prov, keys, mods, ep, hk, lang, ac, acd]) => {
+      api.getAutoStart(),
+    ]).then(([prov, keys, mods, ep, hk, lang, ac, acd, as_]) => {
       setProvider(prov)
       setApiKeys(keys)
       var merged = {}
@@ -101,6 +103,7 @@ function Settings() {
       setTargetLang(lang || 'auto')
       setAutoClose(ac !== false)
       setAutoCloseDelay(acd || 8)
+      setAutoStart(!!as_)
     }).catch(function(e) { console.error('store error', e) })
   }, [])
 
@@ -116,6 +119,7 @@ function Settings() {
       api.storeSet('targetLang', targetLang),
       api.storeSet('autoClose', autoClose),
       api.storeSet('autoCloseDelay', autoCloseDelay),
+      api.setAutoStart(autoStart),
     ])
     api.settingsSaved()
     setSaved(true)
@@ -215,6 +219,19 @@ function Settings() {
                 <select className="select" value={targetLang} onChange={e => setTargetLang(e.target.value)}>
                   {LANG_OPTIONS.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
                 </select>
+              </div>
+              <div className="divider" />
+              <div className="form-group">
+                <div className="toggle-row">
+                  <div>
+                    <div className="label">开机自动启动</div>
+                    <div className="sub-label">登录系统后自动在后台启动</div>
+                  </div>
+                  <label className="toggle">
+                    <input type="checkbox" checked={autoStart} onChange={e => setAutoStart(e.target.checked)} />
+                    <span className="toggle-slider" />
+                  </label>
+                </div>
               </div>
               <div className="divider" />
               <div className="form-group">

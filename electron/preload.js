@@ -23,4 +23,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     openSettings: () => ipcRenderer.send('open-settings'),
     closeWindow: () => ipcRenderer.send('close-window'),
     settingsSaved: () => ipcRenderer.send('settings-saved'),
+
+    // Auto-start on login
+    setAutoStart: (enabled) => ipcRenderer.invoke('set-auto-start', enabled),
+    getAutoStart: () => ipcRenderer.invoke('get-auto-start'),
 })

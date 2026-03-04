@@ -45,10 +45,24 @@
       "package.json"
     ],
     "win": {
-      "target": "nsis"
+      "target": {
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      },
+      "icon": "assets/icon-512.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "SnapAI"
     },
     "mac": {
       "target": "dmg",
+      "icon": "assets/icon-512.png",
       "category": "public.app-category.productivity"
     },
     "linux": {

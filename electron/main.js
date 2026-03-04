@@ -256,6 +256,14 @@ function setupIPC() {
         registerShortcuts()
     })
 
+    // Auto-start on login (Windows registry / macOS LaunchAgents)
+    ipcMain.handle('set-auto-start', (_, enabled) => {
+        app.setLoginItemSettings({ openAtLogin: enabled, openAsHidden: true })
+    })
+    ipcMain.handle('get-auto-start', () => {
+        return app.getLoginItemSettings().openAtLogin
+    })
+
     ipcMain.on('open-settings', () => createSettingsWindow())
     ipcMain.on('close-window', (event) => {
         const win = BrowserWindow.fromWebContents(event.sender)
