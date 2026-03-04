@@ -1,0 +1,123 @@
+name: Build & Release SnapAI
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'           # Trigger on version tags like v1.0.0
+  workflow_dispatch:        # Allow manual trigger from GitHub Actions UI
+
+permissions:
+  contents: write           # Needed to create GitHub Releases
+
+jobs:
+  # ─── Build on Windows ─────────────────────────────────────────────────
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Vite frontend
+        run: npx vite build
+
+      - name: Package with electron-builder (Windows)
+        run: npx electron-builder --win --publish never
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: dist-electron/*.exe
+          retention-days: 5
+
+  # ─── Build on macOS ───────────────────────────────────────────────────
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Vite frontend
+        run: npx vite build
+
+      - name: Package with electron-builder (macOS)
+        run: npx electron-builder --mac --publish never
+        env:
+          # Code signing disabled for open source builds (no Apple Developer cert)
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: dist-electron/*.dmg
+          retention-days: 5
+
+  # ─── Create GitHub Release ────────────────────────────────────────────
+  release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download Windows build
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-build
+          path: ./release
+
+      - name: Download macOS build
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-build
+          path: ./release
+
+      - name: List release files
+        run: ls -la ./release/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "SnapAI ${{ github.ref_name }}"
+          body: |
+            ## SnapAI ${{ github.ref_name }}
+
+            ### 下载安装包
+            - **Windows**: 下载 `.exe` 安装包，双击安装
+            - **macOS**: 下载 `.dmg`，拖拽到 Applications
+
+            > ⚠️ macOS 首次运行：右键 → 打开（因未经 Apple 签名）
+
+            ### 使用前
+            在设置中填写 API Key（阿里千问/火山方舟/Kimi 任选一个）
+
+            ### 快捷键
+            | 操作 | 快捷键 |
+            |------|--------|
+            | 截图翻译 | Ctrl+Shift+T |
+            | 截图解释 | Ctrl+Shift+E |
+            | 历史记录 | Ctrl+Shift+H |
+          files: ./release/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

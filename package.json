@@ -1,0 +1,59 @@
+{
+  "name": "snap-ai",
+  "version": "1.0.0",
+  "description": "桌面截图翻译 & AI 查询工具 — SnapAI",
+  "main": "electron/main.js",
+  "author": "",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "concurrently \"vite\" \"electron .\"",
+    "dev:renderer": "vite",
+    "dev:electron": "electron .",
+    "build:frontend": "vite build",
+    "build": "vite build && electron-builder",
+    "build:win": "vite build && electron-builder --win",
+    "build:mac": "vite build && electron-builder --mac",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "electron-store": "^8.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
+    "electron": "^33.4.0",
+    "electron-builder": "^25.1.8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^6.1.0"
+  },
+  "build": {
+    "appId": "com.snapai.app",
+    "productName": "SnapAI",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}
