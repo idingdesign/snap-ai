@@ -23,45 +23,44 @@
 .selection-border {
     position: absolute;
     inset: 0;
-    border: 2px solid #00ff41;
+    border: 1.5px dashed rgba(255, 255, 255, 0.75);
     background: transparent;
-    /* Completely transparent center */
-    border-radius: 2px;
-    box-shadow:
-        0 0 0 9999px rgba(0, 0, 0, 0.25),
-        /* Darkens everything OUTSIDE selection */
-        0 0 0 1px rgba(0, 255, 65, 0.5),
-        0 0 14px rgba(0, 255, 65, 0.4);
+    border-radius: 1px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.28);
 }
 
-/* Corner handles */
+/* Corner handles — L-shaped brackets */
 .corner {
     position: absolute;
-    width: 8px;
-    height: 8px;
-    background: #00ff41;
-    border-radius: 1px;
-    box-shadow: 0 0 6px rgba(0, 255, 65, 0.8);
+    width: 14px;
+    height: 14px;
+    border-color: #FFB347;
+    border-style: solid;
+    background: transparent;
 }
 
 .corner.tl {
-    top: -4px;
-    left: -4px;
+    top: -2px;
+    left: -2px;
+    border-width: 2.5px 0 0 2.5px;
 }
 
 .corner.tr {
-    top: -4px;
-    right: -4px;
+    top: -2px;
+    right: -2px;
+    border-width: 2.5px 2.5px 0 0;
 }
 
 .corner.bl {
-    bottom: -4px;
-    left: -4px;
+    bottom: -2px;
+    left: -2px;
+    border-width: 0 0 2.5px 2.5px;
 }
 
 .corner.br {
-    bottom: -4px;
-    right: -4px;
+    bottom: -2px;
+    right: -2px;
+    border-width: 0 2.5px 2.5px 0;
 }
 
 .size-label {

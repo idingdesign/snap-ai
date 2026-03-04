@@ -21,8 +21,7 @@ const LANG_OPTIONS = [
 ]
 
 const DEFAULT_HOTKEYS = {
-  translate: 'CommandOrControl+Shift+T',
-  explain: 'CommandOrControl+Shift+E',
+  snap: 'CommandOrControl+Shift+S',
   history: 'CommandOrControl+Shift+H',
 }
 
@@ -96,7 +95,7 @@ function Settings() {
       setProvider(prov)
       setApiKeys(keys)
       var merged = {}
-      PROVIDERS.forEach(function(p) { merged[p.id] = (mods && mods[p.id]) || p.model })
+      PROVIDERS.forEach(function (p) { merged[p.id] = (mods && mods[p.id]) || p.model })
       setModels(merged)
       setCustomEndpoint(ep || '')
       setHotkeys(Object.assign({}, DEFAULT_HOTKEYS, hk))
@@ -104,7 +103,7 @@ function Settings() {
       setAutoClose(ac !== false)
       setAutoCloseDelay(acd || 8)
       setAutoStart(!!as_)
-    }).catch(function(e) { console.error('store error', e) })
+    }).catch(function (e) { console.error('store error', e) })
   }, [])
 
   const handleSave = async () => {
@@ -199,16 +198,17 @@ function Settings() {
             <div className="tab-panel">
               <p className="hint-p">点击快捷键区域，然后按下新组合键。</p>
               {[
-                { key: 'translate', label: '截图 → 翻译' },
-                { key: 'explain', label: '截图 → 解释' },
+                { key: 'snap', label: '截图快捷键' },
                 { key: 'history', label: '历史记录' },
-              ].map(function(item) { return (
-                <div key={item.key} className="form-group hotkey-row">
-                  <label className="label">{item.label}</label>
-                  <HotkeyInput value={hotkeys[item.key] || DEFAULT_HOTKEYS[item.key]}
-                    onChange={val => setHotkeys(prev => Object.assign({}, prev, { [item.key]: val }))} />
-                </div>
-              )})}
+              ].map(function (item) {
+                return (
+                  <div key={item.key} className="form-group hotkey-row">
+                    <label className="label">{item.label}</label>
+                    <HotkeyInput value={hotkeys[item.key] || DEFAULT_HOTKEYS[item.key]}
+                      onChange={val => setHotkeys(prev => Object.assign({}, prev, { [item.key]: val }))} />
+                  </div>
+                )
+              })}
             </div>
           )}
 

@@ -27,4 +27,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // Auto-start on login
     setAutoStart: (enabled) => ipcRenderer.invoke('set-auto-start', enabled),
     getAutoStart: () => ipcRenderer.invoke('get-auto-start'),
+
+    // Retrigger AI with new mode / target language (from result window tabs)
+    retriggerAI: (mode, targetLang) => ipcRenderer.send('retrigger-ai', { mode, targetLang }),
 })

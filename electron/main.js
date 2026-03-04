@@ -15,7 +15,7 @@ let overlayWin = null
 let resultWin = null
 let historyWin = null
 let settingsWin = null
-let currentMode = 'translate' // 'translate' | 'explain'
+let currentImage = null  // Stored for mode/lang switching in result window
 
 // ─── Window helpers ───────────────────────────────────────────────────────────
 
@@ -156,8 +156,7 @@ function registerShortcuts() {
 
     const store = Store.get()
     const DEFAULTS = {
-        translate: 'CommandOrControl+Shift+T',
-        explain: 'CommandOrControl+Shift+E',
+        snap: 'CommandOrControl+Shift+S',
         history: 'CommandOrControl+Shift+H',
     }
     const hotkeys = store.get('hotkeys', DEFAULTS)
@@ -170,8 +169,7 @@ function registerShortcuts() {
     }
 
     const toRegister = [
-        { key: isValid(hotkeys.translate) ? hotkeys.translate : DEFAULTS.translate, fn: () => triggerCapture('translate') },
-        { key: isValid(hotkeys.explain) ? hotkeys.explain : DEFAULTS.explain, fn: () => triggerCapture('explain') },
+        { key: isValid(hotkeys.snap) ? hotkeys.snap : DEFAULTS.snap, fn: () => triggerCapture() },
         { key: isValid(hotkeys.history) ? hotkeys.history : DEFAULTS.history, fn: () => createHistoryWindow() },
     ]
 
@@ -185,8 +183,7 @@ function registerShortcuts() {
 }
 
 
-function triggerCapture(mode) {
-    currentMode = mode
+function triggerCapture() {
     if (overlayWin && !overlayWin.isDestroyed()) {
         overlayWin.close()
         overlayWin = null
@@ -215,10 +212,10 @@ function setupIPC() {
             resultWin.webContents.once('did-finish-load', () => {
                 resultWin.show()  // Show only now — React is mounted, loading dots visible
                 resultWin.webContents.send('init-request', {
-                    mode: currentMode,
-                    imageBase64: imgBase64,
+                    mode: 'explain',  // Default; user can switch to translate via tabs
                 })
-                startAIStream(imgBase64, currentMode)
+                currentImage = imgBase64  // Store for re-triggering on mode/lang switch
+                startAIStream(imgBase64, 'explain')
             })
         } catch (err) {
             console.error('Capture failed:', err)
@@ -264,6 +261,12 @@ function setupIPC() {
         return app.getLoginItemSettings().openAtLogin
     })
 
+    // Retrigger AI with new mode/lang (from result window mode tabs)
+    ipcMain.on('retrigger-ai', (event, { mode, targetLang }) => {
+        if (!currentImage) return
+        startAIStream(currentImage, mode, targetLang || null)
+    })
+
     ipcMain.on('open-settings', () => createSettingsWindow())
     ipcMain.on('close-window', (event) => {
         const win = BrowserWindow.fromWebContents(event.sender)
@@ -276,10 +279,10 @@ function setupIPC() {
     ipcMain.handle('store-delete', (event, key) => Store.get().delete(key))
 }
 
-async function startAIStream(imageBase64, mode) {
+async function startAIStream(imageBase64, mode, targetLangOverride = null) {
     const store = Store.get()
     const provider = store.get('provider', 'qwen')
-    const targetLang = store.get('targetLang', 'auto')
+    const targetLang = targetLangOverride || store.get('targetLang', 'auto')
 
     try {
         await callAI({

@@ -3,9 +3,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg-base: rgba(14, 16, 21, 0.95);
-  --bg-surface: rgba(22, 25, 35, 0.92);
-  --bg-elevated: rgba(30, 34, 47, 0.95);
+  --bg-base: rgba(14, 16, 21, 0.98);
+  --bg-surface: rgba(22, 25, 35, 0.97);
+  --bg-elevated: rgba(30, 34, 47, 0.98);
   --bg-hover: rgba(255, 255, 255, 0.06);
 
   --accent: #4f8cff;
@@ -40,13 +40,16 @@
   --transition: 0.18s ease;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body {
+html,
+body {
   font-family: var(--font);
   color: var(--text-primary);
   background: transparent;
@@ -55,10 +58,22 @@ html, body {
 }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
 
 /* Glass card */
 .glass {
@@ -75,7 +90,8 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px; height: 32px;
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-sm);
   border: none;
   background: transparent;
@@ -84,6 +100,7 @@ html, body {
   transition: background var(--transition), color var(--transition);
   font-size: 15px;
 }
+
 .icon-btn:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
@@ -104,6 +121,7 @@ html, body {
   cursor: pointer;
   transition: background var(--transition), box-shadow var(--transition);
 }
+
 .btn-primary:hover {
   background: var(--accent-hover);
   box-shadow: 0 0 0 3px var(--accent-glow);
@@ -124,10 +142,11 @@ html, body {
   cursor: pointer;
   transition: all var(--transition);
 }
+
 .btn-ghost:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
-  border-color: rgba(255,255,255,0.15);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Input */
@@ -143,11 +162,15 @@ html, body {
   outline: none;
   transition: border-color var(--transition);
 }
+
 .input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px var(--accent-glow);
 }
-.input::placeholder { color: var(--text-muted); }
+
+.input::placeholder {
+  color: var(--text-muted);
+}
 
 /* Select */
 .select {
@@ -163,8 +186,14 @@ html, body {
   outline: none;
   cursor: pointer;
 }
-.select:focus { border-color: var(--accent); }
-.select option { background: #1a1d26; }
+
+.select:focus {
+  border-color: var(--accent);
+}
+
+.select option {
+  background: #1a1d26;
+}
 
 /* Label */
 .label {
@@ -195,9 +224,17 @@ html, body {
 
 /* Cursor blink animation for streaming */
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
+
 .cursor-blink::after {
   content: '▋';
   animation: blink 1s infinite;
@@ -208,25 +245,95 @@ html, body {
 
 /* Fade in */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.fade-in { animation: fadeIn 0.22s ease forwards; }
+
+.fade-in {
+  animation: fadeIn 0.22s ease forwards;
+}
 
 /* Code blocks in result */
-pre, code {
+pre,
+code {
   font-family: var(--font-mono);
   font-size: 12px;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: var(--radius-sm);
 }
-pre { padding: 12px; overflow-x: auto; }
-code { padding: 2px 5px; }
+
+pre {
+  padding: 12px;
+  overflow-x: auto;
+}
+
+code {
+  padding: 2px 5px;
+}
 
 /* Drag region for custom title bars */
 .drag-region {
   -webkit-app-region: drag;
 }
+
 .no-drag {
   -webkit-app-region: no-drag;
+}
+
+/* Utility: button with icon + text gap */
+.btn-icon-gap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Light theme (follows OS setting) ─────────────────────────────────────── */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-base: rgba(248, 249, 252, 0.97);
+    --bg-surface: rgba(255, 255, 255, 0.94);
+    --bg-elevated: rgba(245, 246, 250, 0.97);
+    --bg-hover: rgba(0, 0, 0, 0.05);
+
+    --text-primary: rgba(15, 20, 35, 0.92);
+    --text-secondary: rgba(15, 20, 35, 0.52);
+    --text-muted: rgba(15, 20, 35, 0.30);
+
+    --border: rgba(0, 0, 0, 0.09);
+    --border-subtle: rgba(0, 0, 0, 0.05);
+
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.18);
+  }
+
+  /* Scrollbar for light mode */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.18);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.34);
+  }
+
+  /* Select/option background in light mode */
+  .select option {
+    background: #f8f9fc;
+    color: #0f1423;
+  }
+
+  .lang-select option {
+    background: #f8f9fc;
+    color: #0f1423;
+  }
+
+  .lang-select {
+    background: rgba(240, 241, 246, 0.9);
+  }
 }

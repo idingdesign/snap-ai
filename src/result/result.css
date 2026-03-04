@@ -48,15 +48,62 @@ body {
     flex-shrink: 0;
 }
 
-.result-mode-badge {
+/* Mode tabs (翻译 / 解释) */
+.result-tabs {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 12px;
-    font-weight: 600;
+    gap: 2px;
+}
+
+.result-tab {
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
     color: var(--text-secondary);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background var(--transition), color var(--transition);
+    -webkit-app-region: no-drag;
+}
+
+.result-tab:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.result-tab.active {
+    background: rgba(79, 140, 255, 0.15);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* Language selector in result titlebar */
+.lang-select {
+    appearance: none;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg-base);
+    color: var(--text-secondary);
+    font-family: var(--font);
+    font-size: 11px;
+    cursor: pointer;
+    outline: none;
+    margin-left: 4px;
+    transition: border-color var(--transition);
+}
+
+.lang-select:hover,
+.lang-select:focus {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+}
+
+.lang-select option {
+    background: #1a1d26;
+    color: #fff;
 }
 
 .result-actions-top {
@@ -79,6 +126,10 @@ body {
     color: var(--text-primary);
     white-space: pre-wrap;
     word-break: break-word;
+    /* Allow mouse text selection in the result content */
+    user-select: text;
+    -webkit-user-select: text;
+    cursor: text;
 }
 
 .placeholder-text {
